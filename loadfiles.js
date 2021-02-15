@@ -16,10 +16,12 @@ export function load(myClass, database) {
     const  loadInHtml = (imgLink) => {
         imgLink.forEach(link => {
             console.log(link)
+            const canvas = element('div', ['canvas'])
             const elImg = document.createElement('img')
             elImg.classList.add(['image'])
             elImg.setAttribute('src', link)
-            viewTable.append(elImg)
+            canvas.append(elImg)
+            viewTable.append(canvas)
         })
     }
 

@@ -9,8 +9,16 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
+    "@babel/core": "^7.12.16",
     "@babel/plugin-transform-runtime": "^7.12.15",
-    "parcel-bundler": "^1.12.4"
+    "@babel/preset-env": "^7.12.16",
+    "@babel/preset-react": "^7.12.13",
+    "babel-cli": "^6.26.0",
+    "babel-core": "^6.26.3",
+    "babel-polyfill": "^6.26.0",
+    "babel-preset-stage-0": "^6.24.1",
+    "parcel-bundler": "^1.12.4",
+    "regenerator-runtime": "^0.13.7"
   },
   "dependencies": {
     "firebase": "^8.2.6"

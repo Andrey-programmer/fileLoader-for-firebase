@@ -3,6 +3,7 @@ import 'firebase/storage'
 import 'firebase/database'
 import {upload} from './upload'
 import {load} from './loadfiles'    
+import 'regenerator-runtime/runtime'
 
 
 const firebaseConfig = {
@@ -37,13 +38,11 @@ upload('#file', {
                 block.style.width = `${percent}%`
             }, error => {
                 console.log(error); 
-            }, () => {
-                task.snapshot.ref.getDownloadURL().then(url => {
-                    console.log(url)
+            }, async () => {
+                const url = await task.snapshot.ref.getDownloadURL()
 
                     // Записываем путь в картинку
                     var refData = firebase.database().ref(`allImages/${index}`).set(url)
-                })
             })
 
             

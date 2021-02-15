@@ -156,10 +156,18 @@ input[type=file] {
 }
 
 .image {
-    padding: 5px;
     height: 200px;
     width: auto;
 }
 
+
+.canvas {
+    margin-top: 10px;
+    min-width: 300px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #8c8a8a;
+}
 
 /*# sourceMappingURL=/theme.f91554c8.css.map */
