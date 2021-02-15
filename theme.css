@@ -1,0 +1,162 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto&display=swap');
+
+
+
+body {
+    background: #666;
+    font-family: 'Roboto', sans-serif;
+}
+
+.container {
+    padding-top: 5rem;
+    width: 801px;
+    margin: 0 auto;
+}
+
+.card {
+    border-radius: 6px;
+    background: #fff;
+    padding: 1rem;
+    box-shadow: 2px 3px 10px rgba(0, 0, 0, .2);
+}
+
+.btn {
+    color: #42b983;
+    position: relative;
+    border-radius: 99px;
+    border: 1px solid #42b983;
+    text-decoration: none;
+    text-transform: uppercase;
+    padding: 0.5rem 1.5rem;
+    font-weight: bold;
+    outline: none;
+    background: #fff;
+    transition: all .22s;
+    cursor: pointer;
+    margin-right: 1rem;
+}
+
+.btn.primary {
+    background: #42b983;
+    color: #fff;
+}
+
+.btn.loader {
+    background-color: darkslategray;
+    color: #ffd559;
+}
+
+.btn:active {
+    box-shadow: inset 1px 1px 1px rgba(0, 0, 0, .3);
+}
+
+.btn:hover {
+    cursor: pointer;
+    opacity: .8;
+}
+
+input[type=file] {
+    display: none;
+}
+
+.preview {
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0.5rem;
+    justify-content: space-between;
+}
+
+.preview-image {
+    overflow: hidden;
+    margin-bottom: 0.5rem;
+    position: relative;
+    transition: transform .22s;
+}
+
+.preview-image.removing {
+    transform: scale(0);
+    transition: transform .1s;
+}
+
+.preview-image:hover {
+    transform: scale(1.05);
+} 
+
+.preview-image:hover .preview-remove {
+    opacity: 1;
+}
+
+
+.preview-image:hover .preview-info {
+    bottom: 4px;
+    opacity: 1;
+}
+
+
+.preview-image img {
+    width: auto;
+    background-size: cover;
+    height: 120px;
+}
+
+.preview-remove {
+    opacity:0;
+    width: 20px;
+    height: 20px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    font-weight: bold;
+    background: rgba(255, 255, 255, .5);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: opacity .2s;
+}
+
+.preview-info {
+    opacity: .5;
+    height: 24px;
+    position: absolute;
+    right: 0;
+    bottom: -30px;
+    left: 0;
+    font-size: .8rem;
+    background: rgba(255, 255, 255, .5);
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    transition: bottom .22s, opacity .22s;
+    padding: 0 5px;
+}
+
+.preview-info-progress {
+    opacity: 1;
+    position: absolute;
+    left: 0;
+    top: 0;
+    bottom: 0;
+    background: #42b983;
+    transition: width .22s;
+    width: 30%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.view-table {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 5px;
+    flex-wrap: wrap;
+}
+
+.image {
+    padding: 5px;
+    height: 200px;
+    width: auto;
+}
