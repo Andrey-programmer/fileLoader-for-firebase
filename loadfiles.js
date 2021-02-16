@@ -11,11 +11,11 @@ export function load(myClass, database) {
 
     
     container.prepend(viewTable)
-    console.log(viewTable)
+    // console.log(viewTable)
 
     const  loadInHtml = (imgLink) => {
         imgLink.forEach(link => {
-            console.log(link)
+            // console.log(link)
             const canvas = element('div', ['canvas'])
             const elImg = document.createElement('img')
             elImg.classList.add(['image'])
@@ -26,10 +26,10 @@ export function load(myClass, database) {
     }
 
 
-    loader.addEventListener('click', () => {
+    loader.addEventListener('click', async () => {
         let imageLink = []
         const ref = firebase.database().ref('allImages')
-        ref.on("value", snapshot => {
+        await ref.on("value", snapshot => {
             imageLink = snapshot.val()
             if(imageLink.length) {
                 viewTable.textContent = ''
@@ -40,7 +40,5 @@ export function load(myClass, database) {
         })
 
     })
-
-
 
 }

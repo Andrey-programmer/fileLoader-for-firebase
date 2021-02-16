@@ -110,13 +110,62 @@ export function upload(selector, options = {
 
     }
 
-    const uploadHandler = event => {
+    const uploadHandler = async event => {
         preview.querySelectorAll('.preview-remove').forEach(e => e.remove())
         const previewInfo = preview.querySelectorAll('.preview-info')
         previewInfo.forEach(el => {
             el.style.bottom = '4px'
             el.innerHTML = '<div class="preview-info-progress"></div>'
         })
+
+        // второй вариант
+        {
+            const ref = firebase.database().ref('allImages')
+
+            files.map(async file => {
+                await ref.on("value", snapshot => {
+                    snapshot.val().map((child, index) => {
+                        if (child.indexOf(file.name) !== -1) {
+                            console.log('FileName:', file.name)
+                        } else {
+                            // Удаляем массив имена из массива files если они уже были
+                            const index = child.indexOf(file.name) 
+                            console.log('=== del file.name = ', file.name)
+                            files.splice(index, 1)
+                            console.log(files)
+                        }
+                    })
+                }, function (error) {
+                        console.log("Error: " + error.code)
+                })
+            })
+        }
+
+        // Первый вариант
+        // {
+        //     let imageLinks = []
+
+        //     const ref = firebase.database().ref('allImages')
+        //     await ref.on("value", snapshot => {
+        //             snapshot.val().map((x, index) => {
+        //                 // console.log(x) 
+        //                 imageLinks[index] = x
+        //                 files = files.filter(file => {
+        //                     if (x.indexOf(file.name) !== -1) {
+        //                         console.log('FileName:', file.name)
+        //                     }
+        //                     // Удаляем массив имена из массива files если они уже были
+        //                     return (x.indexOf(file.name) === -1)
+        //                 })
+        //                 console.log(files)
+        //             })
+        //     }, function (error) {
+        //             console.log("Error: " + error.code)
+        //     })
+        // }
+
+        
+           
         onUpload(files, previewInfo)
     }
 

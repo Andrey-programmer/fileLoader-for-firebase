@@ -25,6 +25,20 @@ firebase.initializeApp(firebaseConfig);
 upload('#file', {
     accept: ['.png', '.jpg', '.jpeg', '.gif'],
     onUpload(files, blocks) {
+        // {
+        //     let imageLinks = []
+        //     const ref = firebase.database().ref('allImages')
+        //     await ref.on("value", snapshot => {
+        //             snapshot.val().map((x, index) => {
+        //                 console.log(x) 
+        //                 imageLinks[index] = x
+        //             })
+        //             console.log(imageLinks)
+        //     }, function (error) {
+        //         console.log("Error: " + error.code)
+        //     })
+        // }
+
         files.forEach((file, index) => {
             const ref = storage.ref(`images/${file.name}`) // Создаём референцию (путь)
             const task = ref.put(file) //Кладем туда сам файл
@@ -40,11 +54,9 @@ upload('#file', {
                 console.log(error); 
             }, async () => {
                 const url = await task.snapshot.ref.getDownloadURL()
-
-                    // Записываем путь в картинку
-                    var refData = firebase.database().ref(`allImages/${index}`).set(url)
+                // Записываем путь в картинку
+                var refData = firebase.database().ref(`allImages/${index}`).set(url)
             })
-
             
         })
     }

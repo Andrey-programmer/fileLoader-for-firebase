@@ -27044,6 +27044,10 @@ var _createElement = require("./createElement");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 function bytesToSize(bytes) {
   var sizes = ['Bytes', 'KB', 'MB', 'GB', 'TB'];
 
@@ -27131,17 +27135,94 @@ function upload(selector) {
     }, 500);
   };
 
-  var uploadHandler = function uploadHandler(event) {
-    preview.querySelectorAll('.preview-remove').forEach(function (e) {
-      return e.remove();
-    });
-    var previewInfo = preview.querySelectorAll('.preview-info');
-    previewInfo.forEach(function (el) {
-      el.style.bottom = '4px';
-      el.innerHTML = '<div class="preview-info-progress"></div>';
-    });
-    onUpload(files, previewInfo);
-  };
+  var uploadHandler = /*#__PURE__*/function () {
+    var _ref = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee2(event) {
+      var previewInfo, ref;
+      return regeneratorRuntime.wrap(function _callee2$(_context2) {
+        while (1) {
+          switch (_context2.prev = _context2.next) {
+            case 0:
+              preview.querySelectorAll('.preview-remove').forEach(function (e) {
+                return e.remove();
+              });
+              previewInfo = preview.querySelectorAll('.preview-info');
+              previewInfo.forEach(function (el) {
+                el.style.bottom = '4px';
+                el.innerHTML = '<div class="preview-info-progress"></div>';
+              }); // второй вариант
+
+              ref = _app.default.database().ref('allImages');
+              files.map( /*#__PURE__*/function () {
+                var _ref2 = _asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee(file) {
+                  return regeneratorRuntime.wrap(function _callee$(_context) {
+                    while (1) {
+                      switch (_context.prev = _context.next) {
+                        case 0:
+                          _context.next = 2;
+                          return ref.on("value", function (snapshot) {
+                            snapshot.val().map(function (child, index) {
+                              if (child.indexOf(file.name) !== -1) {
+                                console.log('FileName:', file.name);
+                              } else {
+                                // Удаляем массив имена из массива files если они уже были
+                                var _index = child.indexOf(file.name);
+
+                                console.log('=== del file.name = ', file.name);
+                                files.splice(_index, 1);
+                                console.log(files);
+                              }
+                            });
+                          }, function (error) {
+                            console.log("Error: " + error.code);
+                          });
+
+                        case 2:
+                        case "end":
+                          return _context.stop();
+                      }
+                    }
+                  }, _callee);
+                }));
+
+                return function (_x2) {
+                  return _ref2.apply(this, arguments);
+                };
+              }());
+              // Первый вариант
+              // {
+              //     let imageLinks = []
+              //     const ref = firebase.database().ref('allImages')
+              //     await ref.on("value", snapshot => {
+              //             snapshot.val().map((x, index) => {
+              //                 // console.log(x) 
+              //                 imageLinks[index] = x
+              //                 files = files.filter(file => {
+              //                     if (x.indexOf(file.name) !== -1) {
+              //                         console.log('FileName:', file.name)
+              //                     }
+              //                     // Удаляем массив имена из массива files если они уже были
+              //                     return (x.indexOf(file.name) === -1)
+              //                 })
+              //                 console.log(files)
+              //             })
+              //     }, function (error) {
+              //             console.log("Error: " + error.code)
+              //     })
+              // }
+              onUpload(files, previewInfo);
+
+            case 6:
+            case "end":
+              return _context2.stop();
+          }
+        }
+      }, _callee2);
+    }));
+
+    return function uploadHandler(_x) {
+      return _ref.apply(this, arguments);
+    };
+  }();
 
   open.addEventListener('click', triggerInput);
   input.addEventListener('change', changeHandler);
@@ -27162,17 +27243,20 @@ var _createElement = require("./createElement");
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function asyncGeneratorStep(gen, resolve, reject, _next, _throw, key, arg) { try { var info = gen[key](arg); var value = info.value; } catch (error) { reject(error); return; } if (info.done) { resolve(value); } else { Promise.resolve(value).then(_next, _throw); } }
+
+function _asyncToGenerator(fn) { return function () { var self = this, args = arguments; return new Promise(function (resolve, reject) { var gen = fn.apply(self, args); function _next(value) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "next", value); } function _throw(err) { asyncGeneratorStep(gen, resolve, reject, _next, _throw, "throw", err); } _next(undefined); }); }; }
+
 // Создание кнопки загрузки с сервера
 function load(myClass, database) {
   var container = document.querySelector('.card');
   var viewTable = (0, _createElement.element)('div', myClass, 'Нет загруженных данных');
   var loader = document.querySelector('.loader');
-  container.prepend(viewTable);
-  console.log(viewTable);
+  container.prepend(viewTable); // console.log(viewTable)
 
   var loadInHtml = function loadInHtml(imgLink) {
     imgLink.forEach(function (link) {
-      console.log(link);
+      // console.log(link)
       var canvas = (0, _createElement.element)('div', ['canvas']);
       var elImg = document.createElement('img');
       elImg.classList.add(['image']);
@@ -27182,23 +27266,34 @@ function load(myClass, database) {
     });
   };
 
-  loader.addEventListener('click', function () {
-    var imageLink = [];
+  loader.addEventListener('click', /*#__PURE__*/_asyncToGenerator( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {
+    var imageLink, ref;
+    return regeneratorRuntime.wrap(function _callee$(_context) {
+      while (1) {
+        switch (_context.prev = _context.next) {
+          case 0:
+            imageLink = [];
+            ref = _app.default.database().ref('allImages');
+            _context.next = 4;
+            return ref.on("value", function (snapshot) {
+              imageLink = snapshot.val();
 
-    var ref = _app.default.database().ref('allImages');
+              if (imageLink.length) {
+                viewTable.textContent = '';
+              }
 
-    ref.on("value", function (snapshot) {
-      imageLink = snapshot.val();
+              loadInHtml(imageLink);
+            }, function (error) {
+              console.log("Error: " + error.code);
+            });
 
-      if (imageLink.length) {
-        viewTable.textContent = '';
+          case 4:
+          case "end":
+            return _context.stop();
+        }
       }
-
-      loadInHtml(imageLink);
-    }, function (error) {
-      console.log("Error: " + error.code);
-    });
-  });
+    }, _callee);
+  })));
 }
 },{"firebase/app":"node_modules/firebase/app/dist/index.esm.js","./createElement":"createElement.js"}],"node_modules/regenerator-runtime/runtime.js":[function(require,module,exports) {
 var define;
@@ -27992,6 +28087,19 @@ console.log(storage);
 (0, _upload.upload)('#file', {
   accept: ['.png', '.jpg', '.jpeg', '.gif'],
   onUpload: function onUpload(files, blocks) {
+    // {
+    //     let imageLinks = []
+    //     const ref = firebase.database().ref('allImages')
+    //     await ref.on("value", snapshot => {
+    //             snapshot.val().map((x, index) => {
+    //                 console.log(x) 
+    //                 imageLinks[index] = x
+    //             })
+    //             console.log(imageLinks)
+    //     }, function (error) {
+    //         console.log("Error: " + error.code)
+    //     })
+    // }
     files.forEach(function (file, index) {
       var ref = storage.ref("images/".concat(file.name)); // Создаём референцию (путь)
 
@@ -28060,7 +28168,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "58529" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "50653" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
